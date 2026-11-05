@@ -100,13 +100,25 @@ O diagrama é de processo; estados equivalentes se aplicam a threads. A thread d
 
 ## A4 · Buffer circular e semáforos
 
+### Evidências: prints reais do terminal
+
+As três imagens abaixo são capturas diretas da tela inteira, sem ponteiro, de execuções com 20.000 amostras e N = 6. Elas são rodadas adicionais às nove execuções da tabela; na versão 1, os números variam conforme o escalonamento. O [registro textual das nove rodadas](codigo/resultados.txt) permite conferir cada valor tabulado.
+
+**Versão 1 — sem sincronização:**
+
 ![Print real da versão sem sincronização](img/execucao-v1-print-real.png)
+
+**Versão 2 — semáforos na ordem correta:**
 
 ![Print real da versão com semáforos](img/execucao-v2-print-real.png)
 
+**Versão 3 — ordem invertida:**
+
 ![Print real da versão com ordem invertida](img/execucao-v3-print-real.png)
 
-Experimento real com Python 3 em Windows, N = 6, meta de 20.000 identificadores, três rodadas independentes por versão. O arquivo [resultados.txt](codigo/resultados.txt) guarda a saída integral. Os prints reais do terminal estão abaixo. Eles registram execuções adicionais às nove rodadas da tabela; os números da versão 1 variam com o escalonamento. As ilustrações roxas apresentam a primeira rodada registrada em `resultados.txt`. **Perdidas** = 20.000 menos identificadores distintos válidos consumidos, incluindo os ainda não produzidos quando ocorre travamento; **duplicadas** = ocorrências válidas além da primeira. Consumo conta todas as retiradas, inclusive repetições. A versão 3 atrasa o consumidor por 50 ms para reproduzir buffer cheio; o monitor sinaliza travamento após 1 s sem consumo. Esses são experimentos de concorrência, não medições de latência ou prova de tempo real.
+### Resultados e interpretação
+
+Experimento em Python 3 no Windows, com três rodadas independentes por versão. **Perdidas** = 20.000 menos identificadores distintos válidos consumidos, incluindo os ainda não produzidos quando ocorre travamento; **duplicadas** = ocorrências válidas além da primeira. Consumo conta todas as retiradas, inclusive repetições. A versão 3 atrasa o consumidor por 50 ms para reproduzir buffer cheio; o monitor sinaliza travamento após 1 s sem consumo. Esses são experimentos de concorrência, não medições de latência ou prova de tempo real.
 
 | Versão · rodada | Consumidas | Perdidas | Duplicadas | Travou? |
 |:--|--:|--:|--:|:--:|
