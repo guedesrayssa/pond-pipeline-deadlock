@@ -1,4 +1,9 @@
-"""Executa a versão 2 da simulação de sincronização da Tato."""
+"""Versão 2 da questão A4.
+
+Semáforos: aguarda vaga antes de adquirir o mutex.
+Execute com ``python ponderada/codigo/versao2.py`` na raiz do repositório.
+As métricas são calculadas por ``simulacao.executar``.
+"""
 
 from simulacao import executar
 

@@ -1,4 +1,8 @@
-"""Simulação didática do buffer circular da pulseira Tato (N=6)."""
+"""Experimento A4: produtor e consumidor em um buffer circular de seis posições.
+
+Execute ``python simulacao.py 1|2|3`` ou use os três arquivos ``versao*.py``.
+Cada execução produz 20.000 amostras e encerra após 1 s sem consumo.
+"""
 
 import argparse
 import collections
@@ -10,11 +14,15 @@ TOTAL = 20_000
 
 
 def executar(versao):
-    """Execute a versão 1, 2 ou 3; retorne um dicionário com os resultados.
+    """Execute uma estratégia e conte consumo, perdas, duplicações e travamento.
 
-    versao: número da estratégia de sincronização. O monitor encerra o
-    experimento após um segundo sem consumo; threads são daemons para que
-    uma versão em deadlock não impeça o encerramento do processo.
+    Args:
+        versao: 1 (sem sincronização), 2 (semáforos) ou 3 (ordem invertida).
+
+    Returns:
+        Dicionário com ``consumidas``, ``perdidas``, ``duplicadas``,
+        ``invalidas`` e ``travou``. Perdidas são amostras distintas ausentes.
+        Threads daemon permitem encerrar o processo quando há deadlock.
     """
     buffer = [None] * N
     estado = {'entrada': 0, 'saida': 0, 'ocupados': 0, 'ultimo': time.monotonic()}
@@ -25,7 +33,7 @@ def executar(versao):
     mutex = threading.Semaphore(1)
 
     def produtor():
-        """Produza inteiros sequenciais; sem parâmetros ou valor retornado."""
+        """Grave amostras de 0 a TOTAL-1 no buffer; não retorna valor."""
         for amostra in range(TOTAL):
             if parar.is_set():
                 return
@@ -52,7 +60,7 @@ def executar(versao):
                 cheio.release()
 
     def consumidor():
-        """Consuma até TOTAL itens ou interrupção; não recebe nem retorna valor."""
+        """Retire amostras até TOTAL ou parada; registre cada item consumido."""
         # Na versão 3, o atraso reproduz um consumidor temporariamente ocupado.
         if versao == 3:
             time.sleep(0.05)
@@ -97,7 +105,7 @@ def executar(versao):
 
 
 def main():
-    """Leia a versão da linha de comando e imprima a medição; sem retorno."""
+    """Leia a versão da CLI e imprima as métricas; não retorna valor."""
     parser = argparse.ArgumentParser()
     parser.add_argument('versao', type=int, choices=(1, 2, 3))
     args = parser.parse_args()

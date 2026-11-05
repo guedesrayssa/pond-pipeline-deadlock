@@ -6,7 +6,7 @@ Rayssa Guedes França | D1 = 6 | D2 = 8 | N = 6
 
 **Parâmetros individuais.** Rayssa tem 6 letras; Guedes, 6; França, 6 (ç conta como uma letra). Total: 18. Assim, D1 = 6, D2 = 8, IC = 100.000 + 20.000 × 8 = **260.000 instruções**, m = 3% + 0,5% × 6 = **6%** e N = 3 + (8 mod 5) = **6 posições**.
 
-# Parte A — O problema técnico
+# Parte A: o problema técnico
 
 ## A1 · Arquitetura e memória
 
@@ -22,9 +22,9 @@ Rayssa Guedes França | D1 = 6 | D2 = 8 | N = 6
 2. **V:** considerando 120 ciclos como *penalidade adicional* por falta, AMAT = 1 + 0,06 × 120 = **7,2 ciclos/acesso**. CPI efetivo = 1 + 1,3 × 0,06 × 120 = **10,36 ciclos/instrução**. Tempo médio de CPU = 260.000 × 10,36 / 1.200.000.000 = **2,2453 ms**. Somando até 3 ms de atraso do SO: **5,2453 ms**, acima de 5 ms em 0,2453 ms. Esse é o pior caso *do modelo solicitado*, que soma atraso máximo a um tempo médio de memória; uma taxa média de faltas não garante o pior caso real. Portanto, tampouco prova prazo rígido.
 3. **Amdahl:** speedup = 1 / [(1 − 0,60) + 0,60 / 5] = 1 / 0,52 = **1,9231**. Novo tempo = 8,125 × 0,52 = **4,225 ms**. Atende à conta, sujeito à validação no hardware real e à inclusão de demais custos do caminho até a vibração.
 4. Em V, instruções e dados disputam o caminho para a DRAM: o gargalo de Von Neumann é agravado pela diferença entre CPU e memória; a cache reduz acessos lentos. H usa caminhos separados e SRAM interna de um ciclo, reduzindo essa pressão no modelo, sem precisar de cache.
-5. **Máquina usada:** Windows, Intel Core i5-1345U. O relatório exportado pelo **CPU-Z 3.02** mostra L1 de dados (2 × 48 KB + 7 × 32 KB) e L1 de instruções (2 × 32 KB + 7 × 64 KB), com L2 por grupos de núcleos e L3 de 12 MB. Uma L1 separada mostra uma organização **Harvard modificada** na hierarquia interna, mas não transforma a arquitetura visível de memória unificada em Harvard pura: instruções e dados compartilham o mesmo espaço de memória principal. O [print real do CPU-Z](img/cpu-z-print-real.png) e o [trecho do relatório exportado](img/cpu-z-cache.txt) preservam a fonte da leitura. Nesta versão do CPU-Z, o quadro **Cache** aparece na aba **CPU**; não há aba Caches separada. A [ilustração em roxo](img/cache-cpuz.png) reapresenta os mesmos valores para leitura rápida.
+5. **Máquina usada:** Windows, Intel Core i5-1345U. O relatório exportado pelo **CPU-Z 3.02** mostra L1 de dados (2 × 48 KB + 7 × 32 KB) e L1 de instruções (2 × 32 KB + 7 × 64 KB), com L2 por grupos de núcleos e L3 de 12 MB. Uma L1 separada mostra uma organização **Harvard modificada** na hierarquia interna, mas não transforma a arquitetura visível de memória unificada em Harvard pura: instruções e dados compartilham o mesmo espaço de memória principal. A [captura do CPU-Z](img/cpu-z.png) e o [trecho do relatório exportado](img/cpu-z-cache.txt) preservam a fonte da leitura. Nesta versão do CPU-Z, o quadro **Cache** aparece na aba **CPU**; não há aba Caches separada. A [ilustração em roxo](img/cache-cpuz.png) reapresenta os mesmos valores para leitura rápida.
 
-![Print real do CPU-Z com o quadro Cache](img/cpu-z-print-real.png)
+![CPU-Z com o quadro Cache](img/cpu-z.png)
 
 ## A2 · Pipeline da média móvel
 
@@ -32,7 +32,7 @@ Rayssa Guedes França | D1 = 6 | D2 = 8 | N = 6
 
 **RAW:** I2 ← I1 em x5; I4 ← I2 em x6 e I4 ← I3 em x7; I5 ← I4 em x6. I6 e I7 escrevem ponteiros depois das respectivas leituras: são antidependências WAR, relevantes para a reordenação, não RAW.
 
-### Sem forwarding — 17 ciclos
+### Sem forwarding (17 ciclos)
 
 ```text
 ciclo  01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17
@@ -47,7 +47,7 @@ I7                                         IF ID EX ME WB
 
 A soma são 7 + 4 ciclos de preenchimento/esvaziamento + 6 bolhas = **17**. I2 espera WB de I1; I4 espera WB de I3 (e I2 já escreveu x6); I5 espera WB de I4.
 
-### Com forwarding — 13 ciclos
+### Com forwarding (13 ciclos)
 
 ```text
 ciclo  01 02 03 04 05 06 07 08 09 10 11 12 13
@@ -62,7 +62,7 @@ I7                             IF ID EX ME WB
 
 Total = 7 + 4 + 2 = **13 ciclos**. Permanecem **duas** bolhas load-use: I1→I2 (x5) e I3→I4 (x7), pois o valor de `lw` fica disponível após MEM, tarde demais para a EX imediatamente seguinte. O forwarding também entrega x6 ao store, conforme a hipótese declarada.
 
-### Reordenado com forwarding — 11 ciclos
+### Reordenado com forwarding (11 ciclos)
 
 ```text
 ordem: I1, I6, I2, I3, I7, I4, I5
@@ -100,21 +100,21 @@ O diagrama é de processo; estados equivalentes se aplicam a threads. A thread d
 
 ## A4 · Buffer circular e semáforos
 
-### Evidências: prints reais do terminal
+### Evidências: capturas de tela
 
 As três imagens abaixo são capturas diretas da tela inteira, sem ponteiro, de execuções com 20.000 amostras e N = 6. Elas são rodadas adicionais às nove execuções da tabela; na versão 1, os números variam conforme o escalonamento. O [registro textual das nove rodadas](codigo/resultados.txt) permite conferir cada valor tabulado.
 
-**Versão 1 — sem sincronização:**
+**Versão 1: sem sincronização**
 
-![Print real da versão sem sincronização](img/execucao-v1-print-real.png)
+![Execução da versão sem sincronização](img/execucao-v1.png)
 
-**Versão 2 — semáforos na ordem correta:**
+**Versão 2: semáforos na ordem correta**
 
-![Print real da versão com semáforos](img/execucao-v2-print-real.png)
+![Execução da versão com semáforos](img/execucao-v2.png)
 
-**Versão 3 — ordem invertida:**
+**Versão 3: ordem invertida**
 
-![Print real da versão com ordem invertida](img/execucao-v3-print-real.png)
+![Execução da versão com ordem invertida](img/execucao-v3.png)
 
 ### Resultados e interpretação
 
@@ -134,7 +134,7 @@ Experimento em Python 3 no Windows, com três rodadas independentes por versão.
 
 A região crítica na versão 1 inclui verificar ocupação, acessar a posição circular, atualizar índices e ler/modificar/escrever `ocupados`. `sleep(0)` cede a execução entre leitura e escrita: produtor e consumidor podem sobrescrever a atualização um do outro. O contador passa a não representar o buffer; isso permite sobrescrita prematura ou leitura repetida. O GIL não torna a sequência inteira atômica.
 
-Na versão 2, **vazio** conta vagas e bloqueia produtor em buffer cheio; **cheio** conta itens e bloqueia consumidor em buffer vazio; **mutex** garante exclusão mútua ao manipular buffer e índices. Esperar vaga/item **antes** do mutex permite à outra thread entrar e mudar o estado. Na versão 3, ao encher o buffer, produtor segura mutex e espera vazio; consumidor obtém cheio, mas espera mutex e não consegue liberar vazio: espera circular. `daemon` e monitor permitem encerrar o experimento, não recuperam um sistema real. Registros visuais estilizados das rodadas tabuladas: [versão 1](img/execucao-v1.png), [versão 2](img/execucao-v2.png) e [versão 3](img/execucao-v3.png).
+Na versão 2, **vazio** conta vagas e bloqueia produtor em buffer cheio; **cheio** conta itens e bloqueia consumidor em buffer vazio; **mutex** garante exclusão mútua ao manipular buffer e índices. Esperar vaga/item **antes** do mutex permite à outra thread entrar e mudar o estado. Na versão 3, ao encher o buffer, produtor segura mutex e espera vazio; consumidor obtém cheio, mas espera mutex e não consegue liberar vazio: espera circular. `daemon` e monitor permitem encerrar o experimento, não recuperam um sistema real.
 
 ## A5 · Deadlock: a pulseira congelou
 
@@ -159,7 +159,7 @@ flowchart LR
 
 **Detecção e recuperação:** monitorar progresso e prazo; se uma thread deixar de avançar, sinalizar falha e reinicializar o subsistema ou dispositivo em estado seguro, após garantir consistência dos recursos. Para quem usa, pode haver interrupção da vibração e aviso alternativo; reset não é instantâneo e não substitui prevenção. Um watchdog isolado não demonstra atendimento ao prazo de 5 ms.
 
-# Parte B — Memorando ao conselho
+# Parte B: memorando ao conselho
 
 **Para:** Conselho da Tato<br>
 **De:** CTO<br>

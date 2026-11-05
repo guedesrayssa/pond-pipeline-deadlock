@@ -1,4 +1,9 @@
-"""Executa a versão 1 da simulação de sincronização da Tato."""
+"""Versão 1 da questão A4.
+
+Sem sincronização: contador compartilhado com espera ocupada e corrida.
+Execute com ``python ponderada/codigo/versao1.py`` na raiz do repositório.
+As métricas são calculadas por ``simulacao.executar``.
+"""
 
 from simulacao import executar
 

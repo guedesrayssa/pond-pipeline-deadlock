@@ -1,4 +1,9 @@
-"""Executa a versão 3 da simulação de sincronização da Tato."""
+"""Versão 3 da questão A4.
+
+Ordem invertida: adquire mutex antes de aguardar vaga; pode travar.
+Execute com ``python ponderada/codigo/versao3.py`` na raiz do repositório.
+As métricas são calculadas por ``simulacao.executar``.
+"""
 
 from simulacao import executar
 
