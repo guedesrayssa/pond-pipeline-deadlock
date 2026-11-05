@@ -22,9 +22,9 @@ Rayssa Guedes França | D1 = 6 | D2 = 8 | N = 6
 2. **V:** considerando 120 ciclos como *penalidade adicional* por falta, AMAT = 1 + 0,06 × 120 = **7,2 ciclos/acesso**. CPI efetivo = 1 + 1,3 × 0,06 × 120 = **10,36 ciclos/instrução**. Tempo médio de CPU = 260.000 × 10,36 / 1.200.000.000 = **2,2453 ms**. Somando até 3 ms de atraso do SO: **5,2453 ms**, acima de 5 ms em 0,2453 ms. Esse é o pior caso *do modelo solicitado*, que soma atraso máximo a um tempo médio de memória; uma taxa média de faltas não garante o pior caso real. Portanto, tampouco prova prazo rígido.
 3. **Amdahl:** speedup = 1 / [(1 − 0,60) + 0,60 / 5] = 1 / 0,52 = **1,9231**. Novo tempo = 8,125 × 0,52 = **4,225 ms**. Atende à conta, sujeito à validação no hardware real e à inclusão de demais custos do caminho até a vibração.
 4. Em V, instruções e dados disputam o caminho para a DRAM: o gargalo de Von Neumann é agravado pela diferença entre CPU e memória; a cache reduz acessos lentos. H usa caminhos separados e SRAM interna de um ciclo, reduzindo essa pressão no modelo, sem precisar de cache.
-5. **Máquina usada:** Windows, Intel Core i5-1345U. O relatório exportado pelo **CPU-Z 3.02** mostra L1 de dados (2 × 48 KB + 7 × 32 KB) e L1 de instruções (2 × 32 KB + 7 × 64 KB), com L2 por grupos de núcleos e L3 de 12 MB. Uma L1 separada mostra uma organização **Harvard modificada** na hierarquia interna, mas não transforma a arquitetura visível de memória unificada em Harvard pura: instruções e dados compartilham o mesmo espaço de memória principal. A [evidência visual do relatório exportado pelo CPU-Z](img/cache-cpuz.png) e o [trecho original em texto](img/cpu-z-cache.txt) preservam a fonte da leitura. A imagem é uma composição fiel desse relatório, não uma captura da aba Caches, cujo acesso visual foi limitado pelo Windows.
+5. **Máquina usada:** Windows, Intel Core i5-1345U. O relatório exportado pelo **CPU-Z 3.02** mostra L1 de dados (2 × 48 KB + 7 × 32 KB) e L1 de instruções (2 × 32 KB + 7 × 64 KB), com L2 por grupos de núcleos e L3 de 12 MB. Uma L1 separada mostra uma organização **Harvard modificada** na hierarquia interna, mas não transforma a arquitetura visível de memória unificada em Harvard pura: instruções e dados compartilham o mesmo espaço de memória principal. O [print real do CPU-Z](img/cpu-z-print-real.png) e o [trecho do relatório exportado](img/cpu-z-cache.txt) preservam a fonte da leitura. Nesta versão do CPU-Z, o quadro **Cache** aparece na aba **CPU**; não há aba Caches separada. A [ilustração em roxo](img/cache-cpuz.png) reapresenta os mesmos valores para leitura rápida.
 
-![Dados de cache exportados pelo CPU-Z](img/cache-cpuz.png)
+![Print real do CPU-Z com o quadro Cache](img/cpu-z-print-real.png)
 
 ## A2 · Pipeline da média móvel
 
@@ -100,13 +100,13 @@ O diagrama é de processo; estados equivalentes se aplicam a threads. A thread d
 
 ## A4 · Buffer circular e semáforos
 
-![Saída da versão sem sincronização](img/execucao-v1.png)
+![Print real da versão sem sincronização](img/execucao-v1-print-real.png)
 
-![Saída da versão com semáforos](img/execucao-v2.png)
+![Print real da versão com semáforos](img/execucao-v2-print-real.png)
 
-![Saída da versão com ordem invertida](img/execucao-v3.png)
+![Print real da versão com ordem invertida](img/execucao-v3-print-real.png)
 
-Experimento real com Python 3 em Windows, N = 6, meta de 20.000 identificadores, três rodadas independentes por versão. O arquivo [resultados.txt](codigo/resultados.txt) guarda a saída integral. As imagens abaixo reproduzem fielmente a saída da primeira rodada de cada versão; são composições visuais dos logs reais, não capturas diretas do terminal. **Perdidas** = 20.000 menos identificadores distintos válidos consumidos, incluindo os ainda não produzidos quando ocorre travamento; **duplicadas** = ocorrências válidas além da primeira. Consumo conta todas as retiradas, inclusive repetições. A versão 3 atrasa o consumidor por 50 ms para reproduzir buffer cheio; o monitor sinaliza travamento após 1 s sem consumo. Esses são experimentos de concorrência, não medições de latência ou prova de tempo real.
+Experimento real com Python 3 em Windows, N = 6, meta de 20.000 identificadores, três rodadas independentes por versão. O arquivo [resultados.txt](codigo/resultados.txt) guarda a saída integral. Os prints reais do terminal estão abaixo. Eles registram execuções adicionais às nove rodadas da tabela; os números da versão 1 variam com o escalonamento. As ilustrações roxas apresentam a primeira rodada registrada em `resultados.txt`. **Perdidas** = 20.000 menos identificadores distintos válidos consumidos, incluindo os ainda não produzidos quando ocorre travamento; **duplicadas** = ocorrências válidas além da primeira. Consumo conta todas as retiradas, inclusive repetições. A versão 3 atrasa o consumidor por 50 ms para reproduzir buffer cheio; o monitor sinaliza travamento após 1 s sem consumo. Esses são experimentos de concorrência, não medições de latência ou prova de tempo real.
 
 | Versão · rodada | Consumidas | Perdidas | Duplicadas | Travou? |
 |:--|--:|--:|--:|:--:|
@@ -122,7 +122,7 @@ Experimento real com Python 3 em Windows, N = 6, meta de 20.000 identificadores,
 
 A região crítica na versão 1 inclui verificar ocupação, acessar a posição circular, atualizar índices e ler/modificar/escrever `ocupados`. `sleep(0)` cede a execução entre leitura e escrita: produtor e consumidor podem sobrescrever a atualização um do outro. O contador passa a não representar o buffer; isso permite sobrescrita prematura ou leitura repetida. O GIL não torna a sequência inteira atômica.
 
-Na versão 2, **vazio** conta vagas e bloqueia produtor em buffer cheio; **cheio** conta itens e bloqueia consumidor em buffer vazio; **mutex** garante exclusão mútua ao manipular buffer e índices. Esperar vaga/item **antes** do mutex permite à outra thread entrar e mudar o estado. Na versão 3, ao encher o buffer, produtor segura mutex e espera vazio; consumidor obtém cheio, mas espera mutex e não consegue liberar vazio: espera circular. `daemon` e monitor permitem encerrar o experimento, não recuperam um sistema real. Registros visuais: [versão 1](img/execucao-v1.png), [versão 2](img/execucao-v2.png) e [versão 3](img/execucao-v3.png).
+Na versão 2, **vazio** conta vagas e bloqueia produtor em buffer cheio; **cheio** conta itens e bloqueia consumidor em buffer vazio; **mutex** garante exclusão mútua ao manipular buffer e índices. Esperar vaga/item **antes** do mutex permite à outra thread entrar e mudar o estado. Na versão 3, ao encher o buffer, produtor segura mutex e espera vazio; consumidor obtém cheio, mas espera mutex e não consegue liberar vazio: espera circular. `daemon` e monitor permitem encerrar o experimento, não recuperam um sistema real. Registros visuais estilizados das rodadas tabuladas: [versão 1](img/execucao-v1.png), [versão 2](img/execucao-v2.png) e [versão 3](img/execucao-v3.png).
 
 ## A5 · Deadlock: a pulseira congelou
 
