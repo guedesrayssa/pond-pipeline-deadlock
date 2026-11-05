@@ -1,0 +1,34 @@
+Processors Information
+-------------------------------------------------------------------------
+
+Socket 1			ID = 0
+	Number of cores		9 (max 9)
+	Number of threads	11 (max 12)
+	Hybrid			yes, 2 coresets
+	Core Set 0		P-Cores, 2 cores, 4 threads
+	Core Set 0 caches	[L1D] 2x 48KB + [L1I] 2x 32KB + [L2U] 2x 1280KB + [L3U] 1x 12288KB
+	Core Set 1		E-Cores, 7 cores, 7 threads
+	Core Set 1 caches	[L1D] 7x 32KB + [L1I] 7x 64KB + [L2U] 2x 2048KB + [L3U] 1x 12288KB
+	Manufacturer		GenuineIntel
+	Name			Intel Core i5
+	Codename		Raptor Lake
+	Specification		13th Gen Intel(R) Core(TM) i5-1345U
+	Package (platform ID)	Socket 1744 FCBGA (0x7)
+	CPUID			6.A.3
+	Extended CPUID		6.BA
+	Core Stepping		Q0
+	Technology		10 nm
+	TDP Limit		15.0 Watts
+	Tjmax			100.0 °C
+	Core Speed		4688.5 MHz
+	Multiplier x Bus Speed	47.0 x 99.8 MHz
+	Base frequency (cores)	99.8 MHz
+	Base frequency (mem.)	99.8 MHz
+	Instructions sets	MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, EM64T, AES, AVX, AVX2, FMA3, SHA
+	Microcode Revision	0x6134
+	L1 Data cache		2 x 48 KB (12-way, 64-byte line) + 7 x 32 KB (8-way, 64-byte line)
+	L1 Instruction cache	2 x 32 KB (8-way, 64-byte line) + 7 x 64 KB (8-way, 64-byte line)
+	L2 cache		2 x 1.25 MB (10-way, 64-byte line) + 2 x 2 MB (16-way, 64-byte line)
+	L3 cache		12 MB (12-way, 64-byte line)
+	Max CPUID level		00000020h
+	Max CPUID ext. level	80000008h

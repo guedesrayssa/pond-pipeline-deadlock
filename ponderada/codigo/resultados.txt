@@ -1,0 +1,80 @@
+EXECUCAO 1.1
+TATO | BUFFER CIRCULAR | 20.000 amostras | N=6
+versao: 1
+consumidas: 20000
+perdidas: 3158
+duplicadas: 3158
+invalidas: 0
+travou: False
+
+EXECUCAO 1.2
+TATO | BUFFER CIRCULAR | 20.000 amostras | N=6
+versao: 1
+consumidas: 20000
+perdidas: 3014
+duplicadas: 3014
+invalidas: 0
+travou: False
+
+EXECUCAO 1.3
+TATO | BUFFER CIRCULAR | 20.000 amostras | N=6
+versao: 1
+consumidas: 20000
+perdidas: 2910
+duplicadas: 2910
+invalidas: 0
+travou: False
+
+EXECUCAO 2.1
+TATO | BUFFER CIRCULAR | 20.000 amostras | N=6
+versao: 2
+consumidas: 20000
+perdidas: 0
+duplicadas: 0
+invalidas: 0
+travou: False
+
+EXECUCAO 2.2
+TATO | BUFFER CIRCULAR | 20.000 amostras | N=6
+versao: 2
+consumidas: 20000
+perdidas: 0
+duplicadas: 0
+invalidas: 0
+travou: False
+
+EXECUCAO 2.3
+TATO | BUFFER CIRCULAR | 20.000 amostras | N=6
+versao: 2
+consumidas: 20000
+perdidas: 0
+duplicadas: 0
+invalidas: 0
+travou: False
+
+EXECUCAO 3.1
+TATO | BUFFER CIRCULAR | 20.000 amostras | N=6
+versao: 3
+consumidas: 0
+perdidas: 20000
+duplicadas: 0
+invalidas: 0
+travou: True
+
+EXECUCAO 3.2
+TATO | BUFFER CIRCULAR | 20.000 amostras | N=6
+versao: 3
+consumidas: 0
+perdidas: 20000
+duplicadas: 0
+invalidas: 0
+travou: True
+
+EXECUCAO 3.3
+TATO | BUFFER CIRCULAR | 20.000 amostras | N=6
+versao: 3
+consumidas: 0
+perdidas: 20000
+duplicadas: 0
+invalidas: 0
+travou: True

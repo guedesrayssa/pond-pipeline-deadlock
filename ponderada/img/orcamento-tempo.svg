@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480" role="img" aria-labelledby="title desc">
+<title id="title">O orçamento de tempo da pulseira Tato</title><desc id="desc">Comparação de tempo modelado: H 8,125 ms; H com DSP 4,225 ms; V com atraso do sistema 5,245 ms; limite 5 ms.</desc>
+<rect width="1200" height="480" rx="26" fill="#161026"/><text x="56" y="64" fill="#bd8cff" font-family="Arial" font-size="20" letter-spacing="4">TATO / ARQUITETURA</text><text x="56" y="110" fill="#fff" font-family="Arial" font-weight="bold" font-size="36">Cada milissegundo importa</text><text x="56" y="144" fill="#d3c1eb" font-family="Arial" font-size="19">Tempo por amostra no modelo · limite de 5 ms</text>
+<line x1="695" y1="176" x2="695" y2="398" stroke="#ffe0a8" stroke-width="3" stroke-dasharray="7 7"/><text x="709" y="190" fill="#ffe0a8" font-family="Arial" font-size="17">PRAZO · 5 ms</text>
+<g font-family="Arial" font-size="21"><text x="56" y="233" fill="#fff">H sem DSP</text><rect x="265" y="207" width="698" height="32" rx="8" fill="#ff9dc7"/><text x="977" y="232" fill="#fff">8,125 ms</text>
+<text x="56" y="305" fill="#fff">H com DSP</text><rect x="265" y="279" width="363" height="32" rx="8" fill="#bd8cff"/><text x="643" y="304" fill="#fff">4,225 ms</text>
+<text x="56" y="377" fill="#fff">V + SO</text><rect x="265" y="351" width="450" height="32" rx="8" fill="#d4b3ff"/><text x="770" y="376" fill="#fff">5,245 ms*</text></g>
+<text x="56" y="440" fill="#cbb8e6" font-family="Arial" font-size="16">* Tempo médio de CPU + atraso máximo do SO; não é garantia de pior caso.</text></svg>
